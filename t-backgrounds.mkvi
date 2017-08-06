@@ -1,0 +1,92 @@
+%D \module
+%D   [     file=t-backgrounds,
+%D      version=2017.08.06,
+%D        title=\CONTEXT\ User Module,
+%D     subtitle=Backgrounds,
+%D       author=Aditya Mahajan,
+%D         date=\currentdate,
+%D    copyright=Aditya Mahajan,
+%D        email=adityam <at> ieee <dot> org,
+%D      license=Simplified BSD License]
+
+\writestatus{loading}{Backgrounds (ver: 2017.08.06)}
+
+\startmodule[backgrounds]
+\unprotect
+
+\defineMPinstance[backgrounds][metafun]
+
+\startMPdefinitions{backgrounds}
+  primarydef p lifted s =
+     (llcorner p + ( redpart s + bluepart s, greenpart s + bluepart s))
+     .. controls (0.5[llcorner p, lrcorner p] + (0, bluepart s)) ..
+     (lrcorner p + (-redpart s - bluepart s, greenpart s + bluepart s))
+     -- 
+     (urcorner p + (-redpart s - bluepart s, greenpart s - bluepart s))
+     --
+     (ulcorner p + ( redpart s + bluepart s, greenpart s - bluepart s))
+     -- cycle 
+  enddef;
+
+  vardef lifted_shadow(expr p, s) text t = 
+    save r,g, b;
+    save lift; color lift;
+    if color s : 
+        lift = s;
+    elseif string s :
+        if expandafter known scantokens("lifted" & s) :
+            lift = scantokens("lifted" & s);
+        else 
+            lift = liftedmedium;
+        fi
+    else :
+        lift = liftedmedium;
+    fi
+
+    r = redpart   lift;
+    g = greenpart lift;
+    b = bluepart  lift;
+
+    fill p lifted (r, -g, -4b) t withtransparency ("normal", 0.01);
+    fill p lifted (r, -g, -3b) t withtransparency ("normal", 0.02);
+    fill p lifted (r, -g, -2b) t withtransparency ("normal", 0.04);
+    fill p lifted (r, -g, -1b) t withtransparency ("normal", 0.07);
+    fill p lifted (r, -g,  0b) t withtransparency ("normal", 0.11);
+    fill p lifted (r, -g,  1b) t withtransparency ("normal", 0.11);
+    fill p lifted (r, -g,  2b) t withtransparency ("normal", 0.07);
+    fill p lifted (r, -g,  3b) t withtransparency ("normal", 0.04);
+    fill p lifted (r, -g,  4b) t withtransparency ("normal", 0.02);
+    fill p lifted (r, -g,  5b) t withtransparency ("normal", 0.01);
+  enddef;
+
+   color liftedmedium, liftedbig;
+   liftedmedium := (1.5mm, 1.5mm, 0.12mm);
+   liftedbig    := (  2mm,   3mm, 0.16mm);
+\stopMPdefinitions
+
+\definecolor[shadowcolor][0.5(white)]
+
+\setupMPvariables
+  [backgrounds::liftedshadow]
+  [
+    shadow=big,
+    shadowcolor=shadowcolor,
+  ]
+
+\startuseMPgraphic{backgrounds::liftedshadow}
+  lifted_shadow(OverlayBox, "\MPvar{shadow}")
+          withcolor "\MPvar{shadowcolor}";
+  setbounds currentpicture to OverlayBox;
+\stopuseMPgraphic
+
+\defineoverlay[liftedshadow:big]
+              [\useMPgraphic{backgrounds::liftedshadow}{shadow=big}]
+
+\defineoverlay[liftedshadow:medium]
+              [\useMPgraphic{backgrounds::liftedshadow}{shadow=medium}]
+
+
+\protect
+\stopmodule
+
+
