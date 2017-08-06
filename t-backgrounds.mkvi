@@ -73,9 +73,9 @@
     shadowcolor=shadowcolor,
   ]
 
-\startuseMPgraphic{backgrounds::liftedshadow}
-  lifted_shadow(OverlayBox, "\MPvar{shadow}")
-          withcolor "\MPvar{shadowcolor}";
+  \startuseMPgraphic{backgrounds::liftedshadow}
+    lifted_shadow(OverlayBox,
+        if color \MPvar{shadow} : \MPvar{shadow} else : "\MPvar{shadow}" fi);
   setbounds currentpicture to OverlayBox;
 \stopuseMPgraphic
 
