@@ -73,10 +73,12 @@
     shadowcolor=shadowcolor,
   ]
 
-  \startuseMPgraphic{backgrounds::liftedshadow}
+\startuseMPgraphic{backgrounds::liftedshadow}
     lifted_shadow(OverlayBox,
-        if color \MPvar{shadow} : \MPvar{shadow} else : "\MPvar{shadow}" fi);
-  setbounds currentpicture to OverlayBox;
+        if color \MPvar{shadow} : \MPvar{shadow} else : "\MPvar{shadow}" fi)
+        withcolor \MPcolor{\MPvar{shadowcolor}};
+
+    setbounds currentpicture to OverlayBox;
 \stopuseMPgraphic
 
 \defineoverlay[liftedshadow:big]
